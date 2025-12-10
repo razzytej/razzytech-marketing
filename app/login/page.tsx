@@ -1,30 +1,41 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { signIn } from 'next-auth/react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
-import { VALID_CREDENTIALS, setAuthCookie } from '@/lib/auth'
 
 export default function LoginPage() {
-  const [username, setUsername] = useState('')
+  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const callbackUrl = searchParams.get('callbackUrl') || '/dashboard'
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
     setLoading(true)
 
-    // Simulate network delay
-    await new Promise(resolve => setTimeout(resolve, 500))
+    try {
+      const result = await signIn('credentials', {
+        email,
+        password,
+        redirect: false,
+        callbackUrl,
+      })
 
-    if (username === VALID_CREDENTIALS.username && password === VALID_CREDENTIALS.password) {
-      setAuthCookie(true)
-      router.push('/dashboard')
-    } else {
-      setError('Invalid username or password')
+      if (result?.error) {
+        setError('Invalid email or password')
+        setLoading(false)
+      } else if (result?.ok) {
+        router.push(callbackUrl)
+        router.refresh()
+      }
+    } catch (error) {
+      setError('An error occurred. Please try again.')
       setLoading(false)
     }
   }
@@ -53,17 +64,17 @@ export default function LoginPage() {
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-2">
-                Username
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                Email Address
               </label>
               <input
-                id="username"
-                type="text"
+                id="email"
+                type="email"
                 required
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-600 focus:border-transparent"
-                placeholder="Enter username"
+                placeholder="demo@razzytech.com"
               />
             </div>
 
@@ -85,7 +96,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-green-600 text-white py-3 px-4 rounded-md font-semibold hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-green-600 text-white py-3 px-4 rounded-md font-semibold hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               {loading ? 'Signing in...' : 'Sign in'}
             </button>
@@ -94,7 +105,9 @@ export default function LoginPage() {
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
               Demo credentials: <br />
-              <span className="font-mono bg-gray-100 px-2 py-1 rounded">test / test</span>
+              <span className="font-mono bg-gray-100 px-2 py-1 rounded text-xs">
+                demo@razzytech.com / demo123
+              </span>
             </p>
           </div>
 
