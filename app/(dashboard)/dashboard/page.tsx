@@ -1,4 +1,6 @@
 export default function DashboardPage() {
+  const platformUrl = process.env.NEXT_PUBLIC_PLATFORM_URL || 'http://localhost:3000'
+
   return (
     <div>
       <div className="mb-8">
@@ -13,7 +15,7 @@ export default function DashboardPage() {
       <div className="grid md:grid-cols-2 gap-6">
         {/* Main Dashboard */}
         <a
-          href="http://localhost:3000/dashboard"
+          href={`${platformUrl}/dashboard`}
           target="_blank"
           rel="noopener noreferrer"
           className="bg-white p-8 rounded-lg shadow-lg border-2 border-green-600 hover:shadow-xl transition-shadow"
@@ -37,7 +39,7 @@ export default function DashboardPage() {
 
         {/* Campaign Builder */}
         <a
-          href="http://localhost:3000/campaigns/new"
+          href={`${platformUrl}/campaigns/new`}
           target="_blank"
           rel="noopener noreferrer"
           className="bg-white p-8 rounded-lg shadow-lg hover:shadow-xl transition-shadow"
@@ -64,7 +66,7 @@ export default function DashboardPage() {
       <div className="mt-12 bg-blue-50 border border-blue-200 rounded-lg p-6">
         <h3 className="font-semibold text-blue-900 mb-2">Platform Status</h3>
         <p className="text-blue-800 mb-3">
-          Your RazzyTech platform is running locally at <code className="bg-blue-100 px-2 py-1 rounded">http://localhost:3000</code>
+          Your RazzyTech platform is running at <code className="bg-blue-100 px-2 py-1 rounded">{platformUrl}</code>
         </p>
         <ul className="text-blue-800 space-y-2">
           <li>✅ Dashboard with 182 vehicles</li>

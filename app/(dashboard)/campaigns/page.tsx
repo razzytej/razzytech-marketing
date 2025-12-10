@@ -1,4 +1,6 @@
 export default function CampaignsPage() {
+  const platformUrl = process.env.NEXT_PUBLIC_PLATFORM_URL || 'http://localhost:3000'
+
   return (
     <div>
       <div className="mb-8">
@@ -15,7 +17,7 @@ export default function CampaignsPage() {
           Campaign management coming soon. For now, use the full platform:
         </p>
         <a
-          href="http://localhost:3000/campaigns/new"
+          href={`${platformUrl}/campaigns/new`}
           target="_blank"
           rel="noopener noreferrer"
           className="inline-block bg-green-600 text-white px-6 py-3 rounded-md hover:bg-green-700 font-semibold"
