@@ -35,12 +35,20 @@ export default function RootLayout({
                   Contact
                 </Link>
               </div>
-              <Link 
-                href="/contact"
-                className="bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700"
-              >
-                Get Started
-              </Link>
+              <div className="flex gap-3">
+                <Link
+                  href="/login"
+                  className="text-gray-600 hover:text-gray-900 px-4 py-2 font-medium"
+                >
+                  Login
+                </Link>
+                <Link
+                  href="/contact"
+                  className="bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700"
+                >
+                  Get Started
+                </Link>
+              </div>
             </div>
           </div>
         </nav>
